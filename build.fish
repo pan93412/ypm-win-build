@@ -7,7 +7,7 @@
 . ./safevar.fish
 
 # 要求指定的環境變數
-# safevar YPM_PORTABLE_FILE_PATH
+safevar YPM_PORTABLE_FILE_PATH
 
 # consts
 set -g YPM_DIST_DIR dist
@@ -66,7 +66,7 @@ mshta vbscript:createobject("wscript.shell").run("""%~nx0"" h",0)(window.close)&
 end
 
 create_dist
-extract_ypm YesPlayMusic-0.4.4.exe
+extract_ypm $YPM_PORTABLE_FILE_PATH
 create_scripts
 
 # GC: 清理用完的目錄
