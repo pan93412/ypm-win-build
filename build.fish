@@ -112,7 +112,7 @@ function create_readme -d "產生 README 檔案"
 
     set readme_filepath $ypm_dist_dir/README.txt
 
-    echo "本壓縮包是從 $ypm_src 安裝包組建的，修正 #1145 問題的版本。" > $readme_filepath
+    echo "本壓縮包是從 "(basename $ypm_src)" 安裝包組建的，修正 #1145 問題的版本。" > $readme_filepath
     echo "" >> $readme_filepath
 
     echo (_get_hash_txt $ypm_app_dir/YesPlayMusic.exe) >> $readme_filepath
