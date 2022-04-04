@@ -98,7 +98,7 @@ mshta vbscript:createobject("wscript.shell").run("""%~nx0"" h",0)(window.close)&
 end
 
 function _hash
-    shasum -a 512 $argv | awk '{print $1}'
+    shasum -a 256 $argv | awk '{print $1}'
 end
 
 function _get_hash_txt
