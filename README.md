@@ -2,6 +2,13 @@
 
 組建 YPM for Windows 的啟動器，來繞過 [#1145](https://github.com/qier222/YesPlayMusic/issues/1145) 的問題。
 
+## Prerequisites
+
+- 目前僅在 macOS 測試過
+  - Linux 可能需要將 `_hash` 裡面的 `shasum -a 256` 更改為 `sha256sum`
+  - 未測試 Windows 平台，大概是不支援
+- 需要安裝 `p7zip` 和 `curl`
+
 ## Usage
 
 從遠端下載：
