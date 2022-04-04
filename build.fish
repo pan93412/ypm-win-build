@@ -131,9 +131,13 @@ function compress_artifact -d "壓縮建立完成的檔案"
     set ypm_build_name (basename $ypm_portable_file_path ".exe")
 
     pushd $ypm_dist_dir
-    set filename {$ypm_build_name}"_WINPATCH.zip"
+    set filename {$ypm_build_name}"-win-x64-patch.zip"
 
+    # 將 dist 壓縮為 $filename
     exe_nonfailable_cmd 7z a $filename .
+
+    # 取得壓縮檔的 hash
+    _hash $filename > {$filename}.sha256
 
     popd
 end
