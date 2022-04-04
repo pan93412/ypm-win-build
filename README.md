@@ -4,7 +4,13 @@
 
 ## Usage
 
-    set -gx YPM_PORTABLE_FILE_PATH /path/to/YPM/portable.exe
+從遠端下載：
+
+    fish build.sh https://github.com/qier222/YesPlayMusic/releases/download/v0.4.4-1/YesPlayMusic-0.4.4-1.exe
+
+使用本地檔案：
+
+    set -gx YPM_SRC_FILE /path/to/YPM/portable.exe
     fish build.sh
 
 ## License
