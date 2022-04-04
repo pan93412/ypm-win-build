@@ -12,26 +12,25 @@
 # 要求指定的環境變數
 safevar YPM_PORTABLE_FILE_PATH
 
-# consts
-set -g YPM_DIST_DIR dist
-
-# 暫存目錄
-set -g tmp_dirs
-
 function create_dist -d "建立 dist 資料夾"
+    info 正在建立 dist 資料夾⋯⋯
+    set -g YPM_DIST_DIR dist
+    
     rm -r $YPM_DIST_DIR
     mkdir $YPM_DIST_DIR
 end
 
-function extract_ypm -d "取得 YPM 的軟體目錄"
+function extract_ypm -d "解壓縮 YPM 免安裝包，擷取其軟體目錄"
+    info 正在解壓縮 YPM 免安裝包⋯⋯
+
     # 取得 YPM 檔案的路徑   
     set ypm_file_path $argv[1]
 
     # 建立暫存目錄
-    set tmpdir (mktemp -d)
+    set tmpdir (exe_nonfailable_cmd mktemp -dp)
 
     # 將目前的暫存目錄加進去 $tmp_dir 列表裡面
-    set -g tmp_dirs $tmp_dirs $tmpdir
+    set -g TMP_DIRS $TMP_DIRS $tmpdir
 
     # 將 YPM 免安裝檔複製到暫存目錄
     exe_nonfailable_cmd cp $ypm_file_path $tmpdir/ypm.exe
@@ -58,6 +57,8 @@ function extract_ypm -d "取得 YPM 的軟體目錄"
 end
 
 function create_scripts -d "建立 YPM 啟動指令碼"
+    info 正在建立 YPM 啟動指令碼⋯⋯
+
     echo ':: workaround of #1145
 "%~dp0"\app\YesPlayMusic.exe' > $ypm_app_dir/../start.bat
 
@@ -80,6 +81,7 @@ function _get_hash_txt
 end
 
 function create_readme -d "產生 README 檔案"
+    info 正在產生 README 檔案⋯⋯
     set ypm_src $argv[1]
 
     echo "本壓縮包是從 $ypm_src 安裝包組建的，修正 #1145 問題的版本。" > $ypm_app_dir/../README.txt
@@ -91,6 +93,8 @@ function create_readme -d "產生 README 檔案"
 end
 
 function compress_artifact -d "壓縮建立完成的檔案"
+    info 正在壓縮建立完成的檔案⋯⋯
+
     pushd dist
     set filename {$YPM_PORTABLE_FILE_PATH}"_WINPATCH.zip"
 
