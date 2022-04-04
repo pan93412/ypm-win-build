@@ -32,7 +32,7 @@ function extract_ypm -d "解壓縮 YPM 免安裝包，擷取其軟體目錄"
     set ypm_file_path $argv[2]
 
     # 建立暫存目錄
-    set tmpdir (exe_nonfailable_cmd mktemp -dp)
+    set tmpdir (exe_nonfailable_cmd mktemp -d)
 
     # 將目前的暫存目錄加進去 $tmp_dir 列表裡面
     set -g TMP_DIRS $TMP_DIRS $tmpdir
@@ -55,7 +55,7 @@ function extract_ypm -d "解壓縮 YPM 免安裝包，擷取其軟體目錄"
     popd
     
     # 將 $YPM_APP_DIR 設定為 ypm_app 預期的路徑
-    set -g YPM_APP_DIR $dist_dir/app
+    set -g YPM_APP_DIR {$dist_path}"/app"
 
     # 將 ypm_app 複製到目前目錄的 dist 資料夾
     exe_nonfailable_cmd cp -r $tmpdir/ypm_app $YPM_APP_DIR
@@ -92,13 +92,14 @@ function create_readme -d "產生 README 檔案"
     info 正在產生 README 檔案⋯⋯
     set ypm_dist_dir $argv[1]
     set ypm_src $argv[2]
+    set ypm_app_dir $argv[3]
 
     set readme_filepath $ypm_dist_dir/README.txt
 
     echo "本壓縮包是從 $ypm_src 安裝包組建的，修正 #1145 問題的版本。" > $readme_filepath
     echo "" >> $readme_filepath
 
-    echo (_get_hash_txt $ypm_dist_dir/YesPlayMusic.exe) >> $readme_filepath
+    echo (_get_hash_txt $ypm_app_dir/YesPlayMusic.exe) >> $readme_filepath
     echo (_get_hash_txt $ypm_dist_dir/start.bat) >> $readme_filepath
     echo (_get_hash_txt $ypm_dist_dir/start_silently.bat) >> $readme_filepath
 end
@@ -120,7 +121,7 @@ end
 create_dist
 extract_ypm $YPM_DIST_DIR $YPM_PORTABLE_FILE_PATH
 create_scripts $YPM_DIST_DIR
-create_readme $YPM_DIST_DIR $YPM_PORTABLE_FILE_PATH
+create_readme $YPM_DIST_DIR $YPM_PORTABLE_FILE_PATH $YPM_APP_DIR
 compress_artifact $YPM_DIST_DIR $YPM_PORTABLE_FILE_PATH
 
 info "檔案全部都在 dist 資料夾。"
