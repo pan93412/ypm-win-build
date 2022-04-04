@@ -9,11 +9,6 @@
 # 載入清除暫存目錄的 library
 . ./tmpgc.fish
 
-# 檢查是否有傳入需要的參數
-if test -z "$argv[1]"
-    panic 需要指定 YPM Windows 免安裝檔的下載 HTTP URL。
-end
-
 # -> $YPM_SRC_FILE
 function get_ypm_src -d "取得 YPM 的原始檔案"
     # 取得 src 檔的路徑
@@ -139,8 +134,17 @@ function compress_artifact -d "壓縮建立完成的檔案"
     popd
 end
 
+# 取得 YPM 的來源（Windows 免安裝檔案）檔案
+if test -n "$argv[1]"
+    info 有指定 YPM 下載路徑，正在下載⋯⋯
+    get_ypm_src $argv[1] # -> $YPM_SRC_FILE
+else if test -n "$YPM_SRC_FILE"
+    info 已經有指定 YPM 來源檔案，不需要下載⋯⋯
+else
+    panic 未知 YPM 來源檔案的位置。
+end
+
 create_dist
-get_ypm_src $argv[1]
 extract_ypm $YPM_DIST_DIR $YPM_SRC_FILE
 create_scripts $YPM_DIST_DIR
 create_readme $YPM_DIST_DIR $YPM_SRC_FILE $YPM_APP_DIR
