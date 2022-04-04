@@ -6,6 +6,9 @@
 # 載入與安全相關的 library
 . ./safevar.fish
 
+# 載入清除暫存目錄的 library
+. ./tmpgc.fish
+
 # 要求指定的環境變數
 safevar YPM_PORTABLE_FILE_PATH
 
@@ -104,8 +107,4 @@ compress_artifact
 
 info "檔案全部都在 dist 資料夾。"
 
-# GC: 清理用完的目錄
-for dir in $tmp_dirs
-    info Cleanup: $dir
-    rm -r $dir
-end
+tmpgc
