@@ -9,8 +9,29 @@
 # 載入清除暫存目錄的 library
 . ./tmpgc.fish
 
-# 要求指定的環境變數
-safevar YPM_PORTABLE_FILE_PATH
+# 檢查是否有傳入需要的參數
+if test -z "$argv[1]"
+    panic 需要指定 YPM Windows 免安裝檔的下載 HTTP URL。
+end
+
+# -> $YPM_SRC_FILE
+function get_ypm_src -d "取得 YPM 的原始檔案"
+    # 取得 src 檔的路徑
+    set src_http_address $argv[1]
+    info "正在下載 $src_http_address⋯⋯"
+    
+    # 將目前的暫存目錄加進去 $tmp_dir 列表裡面
+    set -g TMP_DIRS $TMP_DIRS $tmpdir
+
+    # 建立暫存目錄
+    set tmpdir (exe_nonfailable_cmd mktemp -d)
+
+    # 將 $YPM_SRC_FILE 設定為預計放置 ypm.exe 的路徑
+    set -g YPM_SRC_FILE {$tmpdir}/ypm.exe
+
+    # 下載 YPM 執行檔
+    exe_nonfailable_cmd curl -Lo "$YPM_SRC_FILE" "$src_http_address"
+end
 
 # -> $YPM_DIST_DIR
 function create_dist -d "建立 dist 資料夾"
@@ -119,10 +140,11 @@ function compress_artifact -d "壓縮建立完成的檔案"
 end
 
 create_dist
-extract_ypm $YPM_DIST_DIR $YPM_PORTABLE_FILE_PATH
+get_ypm_src $argv[1]
+extract_ypm $YPM_DIST_DIR $YPM_SRC_FILE
 create_scripts $YPM_DIST_DIR
-create_readme $YPM_DIST_DIR $YPM_PORTABLE_FILE_PATH $YPM_APP_DIR
-compress_artifact $YPM_DIST_DIR $YPM_PORTABLE_FILE_PATH
+create_readme $YPM_DIST_DIR $YPM_SRC_FILE $YPM_APP_DIR
+compress_artifact $YPM_DIST_DIR $YPM_SRC_FILE
 
 info "檔案全部都在 dist 資料夾。"
 
