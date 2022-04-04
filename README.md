@@ -7,7 +7,7 @@
 - 目前僅在 macOS 測試過
   - Linux 可能需要將 `_hash` 裡面的 `shasum -a 256` 更改為 `sha256sum`
   - 未測試 Windows 平台，大概是不支援
-- 需要安裝 `p7zip` 和 `curl`
+- 需要安裝 `p7zip`、`curl`，以及 `fish`
 
 ## Usage
 
