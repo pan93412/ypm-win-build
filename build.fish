@@ -14,12 +14,12 @@ function get_ypm_src -d "取得 YPM 的原始檔案"
     # 取得 src 檔的路徑
     set src_http_address $argv[1]
     info "正在下載 $src_http_address⋯⋯"
-    
-    # 將目前的暫存目錄加進去 $tmp_dir 列表裡面
-    set -g TMP_DIRS $TMP_DIRS $tmpdir
 
     # 建立暫存目錄
     set tmpdir (exe_nonfailable_cmd mktemp -d)
+    
+    # 將目前的暫存目錄加進去 $tmp_dir 列表裡面
+    set -g TMP_DIRS $TMP_DIRS $tmpdir
 
     # 將 $YPM_SRC_FILE 設定為預計放置 ypm.exe 的路徑
     set -g YPM_SRC_FILE {$tmpdir}/ypm.exe
